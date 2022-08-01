@@ -50,17 +50,17 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       if (todoItem.title != '' && todoItem.desc != '') {
         todoList.add(todoItem);
-      } else {
-        //do nothing
       }
     });
     todoTittleController.clear();
     todoDescController.clear();
   }
 
-  toggleDone(index) {
-    setState(() {
-      todoList[index].isDone != todoList[index].isDone;
+  _toggleDone(index) {
+    Future.delayed(Duration.zero,(){ //use future otherwise error occur for trying to setState before build (state not exist yet)
+      setState(() {
+      todoList[index].isDone == todoList[index].isDone;
+      });
     });
   }
 
@@ -73,13 +73,18 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: [
           TextField(
+            maxLines: 3,
+            keyboardType: TextInputType.multiline,
             controller: todoTittleController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
               hintText: 'Todo title',
+
             ),
           ),
           TextField(
+            maxLines: 3,
+            keyboardType: TextInputType.multiline,
             controller: todoDescController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(),
@@ -93,9 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
                   title: Text(todoList[index].title ?? ''),
-                  subtitle: Text(todoList[index].desc ?? ''),
+                  subtitle: Text(todoList[index].desc ?? '' , maxLines: 3),
                   leading: InkWell(
-                    onTap: null,
+                    onTap: _toggleDone(index),
                     child: Icon(Icons.check_box,
                         color: todoList[index].isDone == true
                             ? Colors.green
