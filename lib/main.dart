@@ -56,14 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
     todoDescController.clear();
   }
 
-  _toggleDone(index) {
-    Future.delayed(Duration.zero,(){ //use future otherwise error occur for trying to setState before build (state not exist yet)
-      setState(() {
-      todoList[index].isDone == todoList[index].isDone;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         children: [
           TextField(
-            maxLines: 3,
+            maxLines: 2,
             keyboardType: TextInputType.multiline,
             controller: todoTittleController,
             decoration: const InputDecoration(
@@ -83,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           TextField(
-            maxLines: 3,
+            maxLines: 2,
             keyboardType: TextInputType.multiline,
             controller: todoDescController,
             decoration: const InputDecoration(
@@ -97,14 +89,22 @@ class _MyHomePageState extends State<MyHomePage> {
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: Text(todoList[index].title ?? ''),
+                  title: Text(todoList[index].title ?? '', maxLines: 1,),
                   subtitle: Text(todoList[index].desc ?? '' , maxLines: 3),
                   leading: InkWell(
-                    onTap: _toggleDone(index),
+                    onTap: () => {setState(() {
+                    todoList[index].isDone == todoList[index].isDone;
+                    })},
                     child: Icon(Icons.check_box,
                         color: todoList[index].isDone == true
                             ? Colors.green
                             : Colors.grey),
+                  ),
+                  trailing: InkWell(
+                    onTap: () => {setState(() {
+                    todoList.remove(todoList[index]);
+                    })},
+                    child: const Icon(Icons.delete, color: Colors.red),
                   ),
                 );
               },
