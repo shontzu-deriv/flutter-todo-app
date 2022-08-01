@@ -93,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   subtitle: Text(todoList[index].desc ?? '' , maxLines: 3),
                   leading: InkWell(
                     onTap: () => {setState(() {
-                    todoList[index].isDone == todoList[index].isDone;
+                    todoList[index].isDone = !(todoList[index].isDone)!;
                     })},
                     child: Icon(Icons.check_box,
                         color: todoList[index].isDone == true
